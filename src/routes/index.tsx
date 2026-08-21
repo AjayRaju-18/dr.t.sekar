@@ -1,24 +1,57 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Navbar } from "@/components/site/Navbar";
+import { Hero } from "@/components/site/Hero";
+import { Intro } from "@/components/site/Intro";
+import {
+  About,
+  Achievements,
+  Books,
+  Education,
+  Experience,
+  Memberships,
+  Patents,
+  Research,
+  StatsBar,
+} from "@/components/site/Sections";
+import { Contact, Footer } from "@/components/site/Contact";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+const title = "Dr. Sekar Tamilperuvalathan — Manufacturing Engineering, GCT Coimbatore";
+const description =
+  "Portfolio of Dr. Sekar Tamilperuvalathan, Associate Professor & Head of P.G. Manufacturing Engineering at Government College of Technology, Coimbatore — 27+ years in engineering education, research and innovation.";
+
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title },
+      { name: "description", content: description },
+      { property: "og:title", content: title },
+      { property: "og:description", content: description },
+      { property: "og:type", content: "profile" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="min-h-screen bg-background">
+      <Intro />
+      <Navbar />
+      <main>
+        <Hero />
+        <StatsBar />
+        <About />
+        <Education />
+        <Experience />
+        <Research />
+        <Patents />
+        <Books />
+        <Achievements />
+        <Memberships />
+        <Contact />
+      </main>
+      <Footer />
     </div>
   );
 }
