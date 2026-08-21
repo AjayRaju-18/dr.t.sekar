@@ -186,8 +186,8 @@ export function Experience() {
 }
 
 export function Research() {
-  const [active, setActive] = useState(publicationCategories[0].key);
-  const current = publicationCategories.find((c) => c.key === active)!;
+  const [active, setActive] = useState<string>("journals");
+  const current = publicationCategories.find((c) => c.key === active) ?? publicationCategories[0]!;
 
   return (
     <Section id="research" className="bg-steel/20">
