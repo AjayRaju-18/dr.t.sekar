@@ -25,7 +25,13 @@ export function Hero() {
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,color-mix(in_oklab,var(--primary)_18%,transparent),transparent_60%)]" />
 
       {isDesktop ? (
-        <div className="absolute inset-y-0 right-0 w-[70%] [mask-image:linear-gradient(to_right,transparent,black_35%)]">
+        <div
+          className="absolute inset-y-0 right-0 w-[62%]"
+          style={{
+            maskImage: "linear-gradient(to right, transparent 0%, black 45%)",
+            WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 45%)",
+          }}
+        >
           <Suspense fallback={null}>
             <GearScene />
           </Suspense>

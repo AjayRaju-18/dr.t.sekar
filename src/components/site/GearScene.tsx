@@ -79,7 +79,7 @@ export default function GearScene() {
       style={{ pointerEvents: "none" }}
     >
       <Rig />
-      <group rotation={[0.35, -0.3, 0]} scale={0.7} position={[1.4, 0, 0]}>
+      <group rotation={[0.35, -0.3, 0]} scale={0.52} position={[2.2, 0.4, 0]}>
         <Gear position={[0, 0, 0]} radius={2.6} teeth={22} speed={0.16} color="#00b4d8" opacity={0.32} />
         <Gear
           position={[3.6, 2.1, -1.2]}
