@@ -1,6 +1,16 @@
 import { Suspense, lazy } from "react";
 import { motion } from "framer-motion";
-import { BookOpen, Download, Mail, GraduationCap, Database, Library, Linkedin } from "lucide-react";
+import {
+  BookOpen,
+  Download,
+  Mail,
+  GraduationCap,
+  Database,
+  Library,
+  Linkedin,
+  Globe,
+  Award,
+} from "lucide-react";
 import profileImg from "@/assets/profile.jpg";
 import { profile } from "@/data/portfolio";
 import { TiltCard, useHydrated } from "./primitives";
@@ -8,28 +18,41 @@ import { TiltCard, useHydrated } from "./primitives";
 const GearScene = lazy(() => import("./GearScene"));
 
 const quickLinks = [
-  { label: "Google Scholar", icon: GraduationCap, href: "https://scholar.google.com" },
-  { label: "Scopus", icon: Database, href: "https://www.scopus.com" },
-  { label: "Web of Science", icon: Library, href: "https://www.webofscience.com" },
-  { label: "LinkedIn", icon: Linkedin, href: "https://www.linkedin.com" },
+  { label: "LinkedIn", icon: Linkedin, href: profile.linkedin },
+  { label: "Scholar", icon: GraduationCap, href: profile.googleScholar },
+  { label: "Scopus", icon: Database, href: profile.scopusUrl },
+  { label: "WoS", icon: Library, href: profile.webOfScienceUrl },
+  { label: "GCT", icon: Globe, href: profile.collegeProfile },
   { label: "Email", icon: Mail, href: `mailto:${profile.emails[0]}` },
 ];
+
+const fadeUp = (delay: number) => ({
+  initial: { opacity: 0, y: 16 },
+  animate: { opacity: 1, y: 0 },
+  transition: { delay, duration: 0.65, ease: [0.22, 1, 0.36, 1] as const },
+});
 
 export function Hero() {
   const hydrated = useHydrated();
   const isDesktop = hydrated && typeof window !== "undefined" && window.innerWidth >= 768;
 
   return (
-    <section id="top" className="relative overflow-hidden pt-32 pb-20 sm:pt-40">
+    <section
+      id="top"
+      className="relative overflow-hidden"
+      style={{ paddingTop: "clamp(6.5rem, 14vw, 10rem)", paddingBottom: "clamp(3rem, 8vw, 5rem)" }}
+    >
+      {/* Background layers */}
       <div className="blueprint-grid absolute inset-0 opacity-70" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,color-mix(in_oklab,var(--primary)_18%,transparent),transparent_60%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_0%,color-mix(in_oklab,var(--primary)_14%,transparent),transparent_70%)]" />
 
+      {/* Decorative gear — desktop 3D scene, mobile SVG */}
       {isDesktop ? (
         <div
-          className="absolute inset-y-0 right-0 w-[62%]"
+          className="absolute inset-y-0 right-0 w-[55%] pointer-events-none"
           style={{
-            maskImage: "linear-gradient(to right, transparent 0%, black 45%)",
-            WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 45%)",
+            maskImage: "linear-gradient(to right, transparent 0%, black 40%)",
+            WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 40%)",
           }}
         >
           <Suspense fallback={null}>
@@ -38,7 +61,7 @@ export function Hero() {
         </div>
       ) : (
         <svg
-          className="spin-slow absolute top-10 -right-16 h-72 w-72 text-primary/25"
+          className="spin-slow pointer-events-none absolute -right-20 -top-10 h-72 w-72 text-primary/15 sm:h-80 sm:w-80"
           viewBox="0 0 100 100"
           fill="none"
           stroke="currentColor"
@@ -48,161 +71,171 @@ export function Hero() {
           <circle cx="50" cy="50" r="34" />
           <circle cx="50" cy="50" r="12" />
           {Array.from({ length: 16 }).map((_, i) => (
-            <line
-              key={i}
-              x1="50"
-              y1="16"
-              x2="50"
-              y2="8"
-              transform={`rotate(${i * 22.5} 50 50)`}
-            />
+            <line key={i} x1="50" y1="16" x2="50" y2="8" transform={`rotate(${i * 22.5} 50 50)`} />
           ))}
         </svg>
       )}
 
-      <div className="relative mx-auto grid max-w-6xl items-center gap-14 px-5 lg:grid-cols-[1.15fr_0.85fr]">
-        <div>
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15, duration: 0.6 }}
-            className="eyebrow mb-5"
-          >
-            00 / Mechanical Engineering
-          </motion.p>
-          <motion.h1
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.25, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="text-4xl leading-[1.05] font-semibold text-foreground sm:text-6xl"
-          >
-            {profile.name}
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.35, duration: 0.7 }}
-            className="mt-6 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base"
-          >
-            {profile.title}
-          </motion.p>
-          <motion.p
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.42, duration: 0.7 }}
-            className="mt-2 text-sm text-muted-foreground"
-          >
-            {profile.institution}
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5, duration: 0.7 }}
-            className="mt-7 inline-flex items-center gap-3 border-y border-border/70 py-3"
-          >
-            <span className="h-1.5 w-1.5 bg-primary" />
-            <span className="font-display text-xs tracking-[0.22em] text-foreground/90 uppercase">
-              {profile.tagline}
-            </span>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6, duration: 0.7 }}
-            className="mt-9 flex flex-wrap gap-3"
-          >
-            <a
-              href="#research"
-              className="sweep-btn inline-flex items-center gap-2 border border-primary px-6 py-3 font-display text-xs tracking-[0.16em] text-primary uppercase transition-colors hover:text-primary-foreground"
+      {/* Main content grid */}
+      <div className="relative section-inner">
+        <div className="grid items-center gap-8 sm:gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:gap-16">
+          {/* ── Text column ── */}
+          <div>
+            {/* Eyebrow */}
+            <motion.div
+              {...fadeUp(0.15)}
+              className="mb-4 flex flex-wrap items-center gap-2"
             >
-              <BookOpen size={15} strokeWidth={1.5} /> View Publications
-            </a>
-            <a
-              href="#contact"
-              className="sweep-btn inline-flex items-center gap-2 border border-border px-6 py-3 font-display text-xs tracking-[0.16em] text-foreground uppercase transition-colors hover:text-primary-foreground"
-            >
-              <Download size={15} strokeWidth={1.5} /> Download CV
-            </a>
-            <a
-              href="#contact"
-              className="sweep-btn inline-flex items-center gap-2 border border-border px-6 py-3 font-display text-xs tracking-[0.16em] text-foreground uppercase transition-colors hover:text-primary-foreground"
-            >
-              <Mail size={15} strokeWidth={1.5} /> Contact
-            </a>
-          </motion.div>
+              <span className="eyebrow text-[0.6rem] sm:text-[0.65rem]">
+                00 / Mechanical &amp; Manufacturing Engineering
+              </span>
+              <span className="inline-flex items-center gap-1 rounded border border-primary/40 bg-primary/10 px-2 py-0.5 font-display text-[0.58rem] sm:text-[0.62rem] tracking-wider text-primary uppercase">
+                <Award size={10} /> Gold Medalist &amp; C.Eng (UK)
+              </span>
+            </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.75, duration: 0.7 }}
-            className="mt-8 flex flex-wrap items-center gap-3"
-          >
-            {quickLinks.map((l) => (
+            {/* Name */}
+            <motion.h1
+              {...fadeUp(0.25)}
+              className="font-display tracking-tight text-foreground"
+              style={{
+                fontSize: "clamp(1.8rem, 6vw, 3.75rem)",
+                lineHeight: 1.06,
+              }}
+            >
+              {profile.name}
+            </motion.h1>
+
+            {/* Title */}
+            <motion.p {...fadeUp(0.35)} className="mt-3 sm:mt-5 text-sm sm:text-base leading-relaxed text-muted-foreground max-w-xl">
+              {profile.title}
+            </motion.p>
+            <motion.p {...fadeUp(0.42)} className="mt-1.5 text-xs sm:text-sm font-semibold text-foreground/90">
+              {profile.institution}
+            </motion.p>
+
+            {/* Divider tagline */}
+            <motion.div
+              {...fadeUp(0.5)}
+              className="mt-5 sm:mt-6 inline-flex items-center gap-2.5 border-y border-border/60 py-2.5"
+            >
+              <span className="h-1.5 w-1.5 bg-primary rounded-full shrink-0" />
+              <span className="font-display text-[0.62rem] sm:text-xs tracking-[0.2em] text-foreground/80 uppercase">
+                {profile.tagline}
+              </span>
+            </motion.div>
+
+            {/* CTA Buttons — stacked on mobile, row on sm+ */}
+            <motion.div
+              {...fadeUp(0.6)}
+              className="mt-6 sm:mt-8 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap"
+            >
               <a
-                key={l.label}
-                href={l.href}
-                target={l.href.startsWith("mailto") ? undefined : "_blank"}
-                rel="noreferrer"
-                aria-label={l.label}
-                title={l.label}
-                className="group flex h-10 w-10 items-center justify-center border border-border text-muted-foreground transition-all duration-300 hover:-translate-y-1 hover:border-primary/60 hover:text-primary"
+                href="#research"
+                className="sweep-btn inline-flex items-center justify-center gap-2 border border-primary bg-primary/10 px-5 py-3 font-display text-[0.65rem] sm:text-xs tracking-[0.14em] text-primary uppercase transition-colors hover:text-primary-foreground"
               >
-                <l.icon size={16} strokeWidth={1.5} />
+                <BookOpen size={14} strokeWidth={1.5} />
+                View Publications (90+)
               </a>
-            ))}
+              <a
+                href="#patents"
+                className="sweep-btn inline-flex items-center justify-center gap-2 border border-border px-5 py-3 font-display text-[0.65rem] sm:text-xs tracking-[0.14em] text-foreground uppercase transition-colors hover:text-primary-foreground"
+              >
+                <Download size={14} strokeWidth={1.5} />
+                Patents &amp; Innovations
+              </a>
+              <a
+                href="#contact"
+                className="sweep-btn inline-flex items-center justify-center gap-2 border border-border px-5 py-3 font-display text-[0.65rem] sm:text-xs tracking-[0.14em] text-foreground uppercase transition-colors hover:text-primary-foreground"
+              >
+                <Mail size={14} strokeWidth={1.5} />
+                Contact &amp; Supervision
+              </a>
+            </motion.div>
+
+            {/* Quick Profile Links */}
+            <motion.div
+              {...fadeUp(0.72)}
+              className="mt-5 sm:mt-6 flex flex-wrap items-center gap-2"
+            >
+              {quickLinks.map((l) => (
+                <a
+                  key={l.label}
+                  href={l.href}
+                  target={l.href.startsWith("mailto") ? undefined : "_blank"}
+                  rel="noreferrer"
+                  aria-label={l.label}
+                  title={l.label}
+                  className="group flex h-9 sm:h-10 items-center gap-1.5 sm:gap-2 border border-border bg-card/40 px-2.5 sm:px-3 text-muted-foreground transition-all duration-300 hover:-translate-y-1 hover:border-primary/60 hover:text-primary"
+                >
+                  <l.icon size={14} strokeWidth={1.5} />
+                  <span className="font-display text-[0.6rem] sm:text-[0.62rem] tracking-wider">
+                    {l.label}
+                  </span>
+                </a>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* ── Portrait column ── */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.92 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.35, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+            className="relative mx-auto w-full"
+            style={{ maxWidth: "clamp(200px, 50vw, 300px)" }}
+          >
+            {/* Spinning dashed ring */}
+            <svg
+              className="spin-slow pointer-events-none absolute -inset-6 sm:-inset-8 text-primary/35"
+              viewBox="0 0 100 100"
+              fill="none"
+              aria-hidden
+            >
+              <circle
+                cx="50"
+                cy="50"
+                r="47"
+                stroke="currentColor"
+                strokeWidth="0.4"
+                strokeDasharray="2 3"
+              />
+              <circle
+                cx="50"
+                cy="50"
+                r="41"
+                stroke="currentColor"
+                strokeWidth="0.25"
+                strokeDasharray="0.5 5"
+              />
+            </svg>
+
+            <TiltCard intensity={10}>
+              <div className="relative border border-border/80 bg-card/60 p-2 backdrop-blur-sm shadow-2xl">
+                {/* Corner brackets */}
+                <span className="absolute -top-px -left-px h-4 w-4 border-t border-l border-primary" />
+                <span className="absolute -top-px -right-px h-4 w-4 border-t border-r border-primary" />
+                <span className="absolute -bottom-px -left-px h-4 w-4 border-b border-l border-primary" />
+                <span className="absolute -right-px -bottom-px h-4 w-4 border-r border-b border-primary" />
+                <img
+                  src={profileImg}
+                  alt={`Portrait of ${profile.name}`}
+                  width={768}
+                  height={960}
+                  className="w-full object-cover rounded-sm"
+                  loading="eager"
+                  decoding="async"
+                />
+              </div>
+            </TiltCard>
+
+            {/* Caption row */}
+            <div className="mt-3 flex items-center justify-between px-0.5 font-display text-[0.58rem] sm:text-[0.62rem] tracking-[0.2em] text-muted-foreground uppercase">
+              <span>GCT · Coimbatore</span>
+              <span className="text-primary font-medium">Tittagudi Native</span>
+            </div>
           </motion.div>
         </div>
-
-        <motion.div
-          initial={{ opacity: 0, scale: 0.94 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.4, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-          className="relative mx-auto w-full max-w-xs"
-        >
-          <svg
-            className="spin-slow pointer-events-none absolute -inset-8 text-primary/45"
-            viewBox="0 0 100 100"
-            fill="none"
-            aria-hidden
-          >
-            <circle
-              cx="50"
-              cy="50"
-              r="47"
-              stroke="currentColor"
-              strokeWidth="0.4"
-              strokeDasharray="2 3"
-            />
-            <circle
-              cx="50"
-              cy="50"
-              r="41"
-              stroke="currentColor"
-              strokeWidth="0.25"
-              strokeDasharray="0.6 6"
-            />
-          </svg>
-          <TiltCard intensity={12}>
-            <div className="relative border border-border/80 bg-card/60 p-2 backdrop-blur-sm">
-              <img
-                src={profileImg}
-                alt={profile.name}
-                width={768}
-                height={960}
-                className="w-full object-cover"
-              />
-              <span className="absolute -top-px -left-px h-4 w-4 border-t border-l border-primary" />
-              <span className="absolute -top-px -right-px h-4 w-4 border-t border-r border-primary" />
-              <span className="absolute -bottom-px -left-px h-4 w-4 border-b border-l border-primary" />
-              <span className="absolute -right-px -bottom-px h-4 w-4 border-r border-b border-primary" />
-            </div>
-          </TiltCard>
-          <p className="mt-4 text-center font-display text-[0.6rem] tracking-[0.3em] text-muted-foreground uppercase">
-            GCT · Coimbatore
-          </p>
-        </motion.div>
       </div>
     </section>
   );
