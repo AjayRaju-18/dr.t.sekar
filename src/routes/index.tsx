@@ -15,9 +15,10 @@ import {
 } from "@/components/site/Sections";
 import { Contact, Footer } from "@/components/site/Contact";
 
-const title = "Dr. Sekar Tamilperuvalathan — Manufacturing Engineering, GCT Coimbatore";
+const title =
+  "Dr. Sekar Tamilperuvalathan — Associate Professor & Head, P.G-Manufacturing Engg & Engg Design, GCT Coimbatore";
 const description =
-  "Portfolio of Dr. Sekar Tamilperuvalathan, Associate Professor & Head of P.G. Manufacturing Engineering at Government College of Technology, Coimbatore — 27+ years in engineering education, research and innovation.";
+  "Portfolio of Dr. Sekar Tamilperuvalathan, Associate Professor and Head, P.G-Manufacturing Engg & Engg Design at Government College of Technology, Coimbatore — 27+ years in engineering education, research and innovation.";
 
 export const Route = createFileRoute("/")({
   head: () => ({

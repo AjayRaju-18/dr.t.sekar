@@ -20,10 +20,10 @@ export function Reveal({
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.65, delay, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
     </motion.div>
@@ -42,16 +42,18 @@ export function SectionHeading({
   description?: string;
 }) {
   return (
-    <Reveal className="mb-12 max-w-2xl">
-      <div className="eyebrow mb-4 flex items-center gap-3">
-        <span>
+    <Reveal className="mb-10 sm:mb-12 max-w-2xl">
+      <div className="eyebrow mb-3 sm:mb-4 flex items-center gap-2 sm:gap-3">
+        <span className="text-[0.65rem] sm:text-xs">
           {index} / {eyebrow}
         </span>
-        <span className="h-px w-16 bg-primary/50" />
+        <span className="h-px w-10 sm:w-16 bg-primary/50" />
       </div>
-      <h2 className="text-3xl font-semibold text-foreground sm:text-4xl">{title}</h2>
+      <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-foreground tracking-tight">
+        {title}
+      </h2>
       {description ? (
-        <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
+        <p className="mt-3 sm:mt-4 text-xs sm:text-sm lg:text-base leading-relaxed text-muted-foreground">
           {description}
         </p>
       ) : null}
@@ -62,15 +64,18 @@ export function SectionHeading({
 export function CountUp({
   value,
   suffix = "",
-  duration = 1600,
+  duration = 1800,
+  className,
 }: {
   value: number;
   suffix?: string;
   duration?: number;
+  className?: string;
 }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
+  const inView = useInView(ref, { once: true, amount: 0.1 });
   const [display, setDisplay] = useState(0);
+  const [isDone, setIsDone] = useState(false);
 
   useEffect(() => {
     if (!inView) return;
@@ -78,16 +83,30 @@ export function CountUp({
     const start = performance.now();
     const tick = (now: number) => {
       const p = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - p, 3);
-      setDisplay(Math.round(value * eased));
-      if (p < 1) frame = requestAnimationFrame(tick);
+      // Quintic ease-out for a smooth rolling digital counter feel
+      const eased = 1 - Math.pow(1 - p, 4);
+      const current = Math.round(value * eased);
+      setDisplay(current);
+      if (p < 1) {
+        frame = requestAnimationFrame(tick);
+      } else {
+        setDisplay(value);
+        setIsDone(true);
+      }
     };
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
   }, [inView, value, duration]);
 
   return (
-    <span ref={ref} className="tabular-nums">
+    <span
+      ref={ref}
+      className={cn(
+        "tabular-nums inline-block transition-transform duration-300",
+        isDone && "scale-[1.03]",
+        className,
+      )}
+    >
       {display}
       {suffix}
     </span>
