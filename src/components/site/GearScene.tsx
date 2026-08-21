@@ -79,15 +79,15 @@ export default function GearScene() {
       style={{ pointerEvents: "none" }}
     >
       <Rig />
-      <group rotation={[0.35, -0.3, 0]}>
-        <Gear position={[0, 0, 0]} radius={2.6} teeth={22} speed={0.16} color="#00b4d8" opacity={0.55} />
+      <group rotation={[0.35, -0.3, 0]} scale={0.7} position={[1.4, 0, 0]}>
+        <Gear position={[0, 0, 0]} radius={2.6} teeth={22} speed={0.16} color="#00b4d8" opacity={0.32} />
         <Gear
           position={[3.6, 2.1, -1.2]}
           radius={1.35}
           teeth={14}
           speed={-0.3}
           color="#7fd8ea"
-          opacity={0.3}
+          opacity={0.18}
         />
         <Gear
           position={[-3.4, -2, -1.6]}
@@ -95,7 +95,7 @@ export default function GearScene() {
           teeth={12}
           speed={0.38}
           color="#ff7a00"
-          opacity={0.25}
+          opacity={0.16}
         />
       </group>
     </Canvas>
